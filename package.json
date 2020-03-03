@@ -1,0 +1,26 @@
+{
+  "name": "reversi",
+  "version": "1.0.0",
+  "description": "The game reversi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamReptar/Reversi.git"
+  },
+  "keywords": [
+    "reversi"
+  ],
+  "author": "M'Kya",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/IamReptar/Reversi/issues"
+  },
+  "homepage": "https://github.com/IamReptar/Reversi#readme",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "socket.io": "^2.3.0"
+  }
+}
