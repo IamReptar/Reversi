@@ -84,7 +84,7 @@ socket.on('join_room_response', function(payload){
   });
 
 //what to do when someone leaves
-  socket.on('player_disconcted', function(payload){
+  socket.on('player_disconnected', function(payload){
     if(payload.result == 'fail'){
       alert(payload.message);
       return;
@@ -102,16 +102,16 @@ socket.on('join_room_response', function(payload){
     }
 
   //manage  message that a player has left
-    var newHTML = '<p>' + payload.username + ' just left the lobby</p>';
-    var newNode = $(newHTML);
-    newNode.hide();
-    $('#messages').append(newNode);
-    newNode.slideDown(1000);
-    });
+  var newHTML = '<p>' + payload.username + ' just left the lobby</p>';
+  var newNode = $(newHTML);
+  newNode.hide();
+  $('#messages').append(newNode);
+  newNode.slideDown(1000);
+  });
 
 socket.on('send_message_response', function(payload){
   if(payload.result == 'fail'){
-    alert(payload.message);
+    alert("they left");
     return;
   }
   $('#messages').append('<p><b>'+payload.username +' says:</b> '+payload.message+'</p>');
