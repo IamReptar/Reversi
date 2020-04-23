@@ -584,10 +584,12 @@ socket.on('invite',function(payload){
 				//execute move
 				if(color == 'white'){
 					game.board[row][column] = 'w';
+					flip_board('w',row,column,game.board);
 					game.whose_turn = 'black';
 					game.legal_moves = calculate_valid_moves('b', game.board);
 				} else if(color == 'black'){
 					game.board[row][column] = 'b';
+					flip_board('b',row,column,game.board);
 					game.whose_turn = 'white';
 					game.legal_moves = calculate_valid_moves('w', game.board);
 				}
@@ -711,7 +713,39 @@ function calculate_valid_moves(who, board){
 	return valid;
 }
 
+function flip_line(who,dr,dc,r,c,board){
+	if( (r+dr < 0) || (r+dr > 7)){
+		return false;
+	}
+	if( (c+dc < 0) || (c+dc > 7)){
+		return false;
+	}
+	if(board[r+dr][c+dc] === ' '){
+		return false;
+	}
+	if(board[r+dr][c+dc] === who){
+		return true;
+	}else{
+		if(flip_line(who,dr,dc,r+dr,c+dc,board)){
+			board[r+dr][c+dc] = who;
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+function flip_board(who,row,column,board){
+	flip_line(who,-1,-1,row,column,board);
+	flip_line(who,-1,0,row,column,board);
+	flip_line(who,-1,1,row,column,board);
 
+	flip_line(who,0,-1,row,column,board);
+	flip_line(who,0,1,row,column,board);
+
+	flip_line(who,1,-1,row,column,board);
+	flip_line(who,1,0,row,column,board);
+	flip_line(who,1,1,row,column,board);
+}
 
 function send_game_update(socket, game_id, message){
 	//check to see if a game with game id already exists.
@@ -780,19 +814,35 @@ function send_game_update(socket, game_id, message){
 	//check if game is over
 	var row, column;
 	var count = 0;
+	var black = 0; //spots captured
+	var  white = 0;
 	for(row = 0; row < 8; row++){
 		for(column = 0; column < 8; column++){
-			if(games[game_id].board[row][column] != ' '){
+			if(games[game_id].legal_moves[row][column] != ' '){
 				count++;
+			}
+			if(games[game_id].board[row][column] === 'b'){
+				black++;
+			}
+			if(games[game_id].board[row][column] === 'w'){
+				white++;
 			}
 		}
 	}
-	if(count == 64){
+	if(count == 0){
 		//send game over
+
+		var winner = 'everyone';
+		if(black > white){
+			winner = 'Hitmon';
+		} 
+		if(white > black){
+			winner = 'Charizard';
+		}
 		var success_data = {
 													result: 'success',
 													game: games[game_id],
-													who_won: 'everyone',
+													who_won: winner,
 													game_id: game_id
 											 };
 		io.in(game_id).emit('game_over', success_data);
