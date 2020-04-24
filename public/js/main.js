@@ -356,7 +356,7 @@ socket.on('game_update',function(payload){
           $('#'+row +'_'+ column).addClass('hovered_over');
           $('#'+row+'_'+column).click(function(r,c){
             return function(){
-              var payload = {}; 
+              var payload = {};
               payload.row = r;
               payload.column = c;
               payload.color = my_color;
@@ -392,6 +392,12 @@ socket.on('game_over', function(payload){
   }
   //jump to new page
   $('#game_over').html('<h1>Game Over </h1><h2> '+payload.who_won +' won!</h2>');
+  if(payload.who_won === 'Charizard'){
+    $('#game_over').append('<img src = "assets/images/charWin.gif" alt = "Charizard wins"/>');
+  }else{
+    $('#game_over').append('<img src = "assets/images/hitWin.gif" alt = "Hitmon wins"/>');
+  }
   $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-large active" role="button" aria-pressed="true">Return to the Lobby</a>');
+
 
 });
