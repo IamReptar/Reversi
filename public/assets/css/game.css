@@ -14,8 +14,8 @@ table#game_board td{
 #messages p{
   margin: 0px;
 }
- 
-td.hovered_over:hover {
-  background-image: url('../images/hover.gif'),rgb(0,255,0);
+
+td.hovered_over {
+  background: url('../images/hover.gif'),rgb(0,255,0);
   background-size: 100% 100%;
 }
